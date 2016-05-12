@@ -78,7 +78,7 @@ Step 20: Require mongoose in your dataset files as a dependency. Example:
 	var mongoose = require('mongoose');
 
 Step 21: Export your datsets as modules. (First parameter is the name of the model. Second paramater is the data of the model) Example:
-	module.export = mongoose.model('User', {
+	module.exports = mongoose.model('User', {
 		email: String,
 		password: String
 	});
@@ -241,4 +241,156 @@ Step 45: Fix up styling by centering input fields in the signup.html file. Examp
 //MONGO POST REQUESTS//
 ///////////////////////
 
-Step 46: 
+Step 46: Add $http dependency to your signup-controller. Example:
+	(function() {
+		angular.module('TimeWaste')
+		.controller('SignupController', ['$scope','$state', '$http', function($scope, $state, $http) {
+
+		}]);
+	}());
+
+Step 47: Add the create user functionality to your signup-controller.js file. Example:
+	$scope.createUser = function() {
+		// Namespacing isn't necessary as we have already declared our models (input fields) within the confines of an object. Eg-newUser
+		$http.post('api/user/signup', $scope.newUser).success(function(response) {
+
+		}).error(function(error) {
+			console.log(error);
+		})
+	}
+
+Step 48: Create an endpoint in your server.js file for when you submit a newUser. Example:
+	// Authentication
+	// Creating a post request equal to the post route created in the signup-controller (api/user/signup), and then calling the signup function inside the authenticationController
+	app.post('/api/user/signup', authenticationController.signup);
+
+Step 49: Create a new controllers directory in the server directory and add a new authenticationController. Example:
+	$ cd server
+	$ mkdir controllers
+	$ cd controllers
+	$ touch authentication-controller.js
+
+Step 50: Require mongoose and the users dataset in your authentication-controller.js file. Example:
+	var mongoose = require('mongoose');
+	var User = require('../datasets/users');
+
+Step 51: Require your authentication-controller in your server.js file. Example:
+	var authenticationController = require('./server/controllers/authentication-controller');
+
+Step 52: Add body-parser to your server.js file. Example:
+	app.use(bodyParser.json());
+
+Step 53: Add and export the signup function inside your authentication-controller.js file. Example:
+	module.exports.signup = function (req, res) {
+		var user = new User(req.body);
+		user.save();
+
+		res.json(req.body);
+	}
+
+///////////////////////
+//LOGIN FUNCTIONALITY//
+///////////////////////
+
+Step 54: Create a navigation controller in your app/signup directory to display different data whether a user is logged in or not. Example:
+	$ cd app
+	$ mkdir navigation
+	$ cd navigation
+	$ touch navigation-controller.js
+
+Step 55: Create the navigation controller by wrapping it in an anonymous function. Example:
+	(function() {
+		angular.module('TimeWaste')
+		.controller('NavigationController', ['$scope','$state','$http', function($scope, $state, $http) {
+			
+		}])
+	}());
+
+Step 56: Bind the navigation controller to the navbar in the index.html file. Example:
+	</head>
+	<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationController">
+
+Step 57: Add the new navigation controller to your index file. Example:
+		<!-- Controllers: -->
+		<script src="app/signup/signup-controller.js"></script>
+		<script src="app/navigation/navigation-controller.js"></script>
+	</html>
+
+Step 58: Create a login function in your navigation controller to create a session. Example: 
+	.controller('NavigationController', ['$scope','$state','$http', function($scope, $state, $http) {
+
+		$scope.logUserIn = function() {
+			$http.post('/api/user/login', $scope.login).success(function(response) {
+				// Creating a local storage instance as a services
+				localStorage.setItem('User-Data', JSON.stringify(response));
+				// Updating loggedIn variable to true to update navbar display
+				$scope.loggedIn = true;
+			}).error(function(error) {
+				console.log(error);
+			})
+		}
+
+Step 59: Update login button on navbar to call the logUserIn function. Example:
+	<div> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button ng-click="logUserIn()">Login</button><a ui-sref="signUp">Create an Account</a>
+
+Step 60: Add user login functionality in your server.js file. Example:
+	app.post('/api/user/signup', authenticationController.signup);
+	app.post('/api/user/login', authenticationController.login);
+
+Step 61: Create a login function in your authentication-controller. Example:
+	module.exports.login = function (req, res) {
+		User.find(req.body, function(err, results) {
+			if (err) {
+				console.log("Error is: ", err);
+			}
+			if (results && results.length === 1) {
+				res.json(req.body.email);
+			}
+		})
+	}
+
+Step 62: When a user logs in, instead of the email, in local storage save the unique Id that Mongo created when a user is created. (Change in authenticationController) Example:
+	User.find(req.body, function(err, results) {
+		if (err) {
+			console.log("Error is: ", err);
+		} else {
+			// Adding another if statement if request is a success. If there is only one result from the Mongo db then...
+			if (results && results.length === 1) {
+				// userData is going to be the response object from Mongo
+				var userData = results[0];
+				// and we're going to respond with the email and unique Mongo user id.
+				res.json({email: req.body.email,
+							_id: userData._id});
+			} else {
+				console.log("Something is wrong. The results are: ", results);
+			}
+		}
+	})
+
+Step 63: Create a check to confirm if there is a user logged in by looking at localStorage. (This is usually created as a service but for now we're going to add code directly into navigation-controller.) Example: 
+	.controller('NavigationController', ['$scope','$state','$http', function($scope, $state, $http) {
+
+		if (localStorage['User-Data']) {
+			$scope.loggedIn = true;
+		} else {
+			$scope.loggedIn = false;
+		}
+
+Step 64: Update navbar to switch displays depending on $scope.loggedIn variable you just created. Example:
+	<div class="container">
+		<div ng-show="!loggedIn"> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button ng-click="logUserIn()">Login</button><a ui-sref="signUp">Create an Account</a>
+		</div>
+	</div>
+	<div ng-show="loggedIn"> <a ui-sref="editProfile">Edit Profile</a></div>
+
+//////////////////////////////////////////
+//CREATING NEW PAGE/STATE (profile page)//
+//////////////////////////////////////////
+
+Step 65: 
+
+
+
+
+
+

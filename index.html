@@ -4,11 +4,12 @@
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="app/css/main.css">
 	</head>
-	<nav class="navbar navbar-default navbar-fixed-top">
+	<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationController">
 			<div class="container">
-				<div> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button>Login</button><a ui-sref="signUp">Create an Account</a>
+				<div ng-show="!loggedIn"> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button ng-click="logUserIn()">Login</button><a ui-sref="signUp">Create an Account</a>
 				</div>
 			</div>
+			<div ng-show="loggedIn"> <a ui-sref="editProfile">Edit Profile</a></div>
 		</nav>
 	<body>
 		<div ui-view></div>
@@ -20,4 +21,5 @@
 
 	<!-- Controllers: -->
 	<script src="app/signup/signup-controller.js"></script>
+	<script src="app/navigation/navigation-controller.js"></script>
 </html>
