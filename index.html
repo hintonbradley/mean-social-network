@@ -2,14 +2,22 @@
 <html ng-app="TimeWaste">
 	<head>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="app/css/main.css">
 	</head>
-	<body>
-		<nav class="navbar navbar-default navbar-fixed-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
-				My Navbar
+				<div> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button>Login</button><a ui-sref="signUp">Create an Account</a>
+				</div>
 			</div>
 		</nav>
+	<body>
+		<div ui-view></div>
 	</body>
 	<script src="node_modules/angular/angular.min.js"></script>
+	<!-- Step 32: Adding UI-Router CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"></script>
 	<script src="app/app.js"></script>
+
+	<!-- Controllers: -->
+	<script src="app/signup/signup-controller.js"></script>
 </html>

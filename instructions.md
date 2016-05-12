@@ -97,8 +97,8 @@ Step 23: Create an app.js file for Angular in your app directory. Example:
 
 Step 24: In your app.js file, wrap your angular code in an anonymous function so that when you minify your javascript files your ports will not collide. Example: 
 	(function() {
-	angular.module('<myAppName>', []);
-	});
+		angular.module('TimeWaste', []);
+		}());
 
 Step 25: Invoke your middleware for paths for app and node_modules directories in the server.js file. Example:
 	app.use('/app', express.static(__dirname + "/app"));
@@ -130,6 +130,115 @@ Step 31: Add a navbar to the top with a fixed-top to the index.html file. Exampl
 		</nav>
 		...
 
-Step 32: 
+///////////
+//ROUTING//
+///////////
 
+Step 32: Add the CDN for ui-router at cdnjs.com/libraries/angular-ui-router and add it to your index.html file. Example:
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"></script>
 
+Step 33: Add ui-router as a dependancy to angular in your app.js file. Example:
+	(function() {
+		angular.module('TimeWaste', ['ui.router']);
+	}());
+
+Step 34: Set up your configuration for your angular states in your app.js file. Example:
+	(function() {
+	angular.module('TimeWaste', ['ui.router'])
+		.config(function($stateProvider) {
+
+		$stateProvider
+			.state('signUp', {
+				url: '/signup',
+				templateUrl: 'app/signup/signup.html',
+				controller: 'SignUpController'
+			})
+		})
+	}());
+
+Step 35: In the app directory, create your new controller and view. Example:
+	$ cd app
+	$ mkdir signup
+	$ cd signup
+	$ touch signup.html
+	$ touch signup-controller.js
+
+Step 36: Create your new controller in your new (signup-)controller file (wrapped in an anonymous function). Example:
+	(function() {
+	<!-- We're adding data to the angular module so it must begin with angular.module -->
+		angular.module('TimeWaste')
+		.controller('SignupController', ['$scope','$state', function($scope, $state) {
+
+		}]);
+	}());
+
+Step 37: In your new view file, create a basic html file to test. Example:
+	<div class="row">
+	<div class="col-sm-6">
+		<div class="row">
+			<strong>Email Address</strong>
+			<input type="text" ng-model="newUser.email" class="form-control"></input>
+		</div>
+		<div class="row">
+			<strong>Password</strong>
+			<input type="text" ng-model="newUser.password" class="form-control"></input>
+		</div>
+		<button ng-click="createUser()">Submit</button>
+	</div>
+</div>
+
+Step 38: Notify Angular of the ui-view in your index.html file. Example:
+		</nav>
+		<div ui-view></div>
+	</body>
+
+Step 39: Add the controller in your index.html file. Example:
+	<!-- Controllers: -->
+	<script src="app/signup/signup-controller.js"></script>
+
+Step 40: In your navbar, create links to different routes in your app to test functionality. Example:
+		<div class="container">
+			<div> <input type="text" ng-model="login.email"> <input type="password" ng-model="login.password"> <button>Login</button> <a ui-sref="signUp">Create an Account</a>
+			</div>
+		</div>
+	</nav>
+
+////////////////////
+//Create CSS files//
+////////////////////
+
+Step 41: In your app directory, create new CSS directory and inside of that new directory, create a main.css file. Example:
+	$ cd app
+	$ mkdir css
+	$ cd css
+	$ touch main.css
+
+Step 42: Add code to your new main.css file to improve styling. Example:
+	/* Base Elements */
+
+	body {
+		margin-top: 70px;
+	}
+
+Step 43: Move the navbar outside of the <body> tag.(Move it so it sits just above the body tag) Example:
+	</head>
+	<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div> <input type="text" ng-model="login.email"></input><input type="password" ng-model="login.password"></input><button>Login</button><a ui-sref="signUp">Create an Account</a>
+				</div>
+			</div>
+		</nav>
+	<body>
+
+Step 44: Link your new stylesheet in the index.html file. Example:
+	<link rel="stylesheet" type="text/css" href="app/css/main.css">
+	</head>
+
+Step 45: Fix up styling by centering input fields in the signup.html file. Example:
+	<div class="col-sm-6 col-sm-offset-3">
+
+///////////////////////
+//MONGO POST REQUESTS//
+///////////////////////
+
+Step 46: 
